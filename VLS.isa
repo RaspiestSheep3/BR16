@@ -120,8 +120,12 @@ spage %a(register)
 00011010 0000aaaa
 Sets the SSD page to %a
 
-offset %address(register)
+dquick %a(register)
 00011011 0000aaaa
+Sets the DATA page to %a for one tick, before returning to previous value
+
+offset %address(register)
+00011100 0000aaaa
 Adds %a to any SSD address
 
 
@@ -157,8 +161,12 @@ spage %a(immediate)
 10011010 aaaaaaaa aaaaaaaa
 Sets the SSD page to %a
 
+dquick %a(immediate)
+10011011 aaaaaaaa aaaaaaaa
+Sets the DATA page to %a for one tick, before returning to previous value
+
 offset %address(immediate)
-10011011 00000000 aaaaaaaa aaaaaaaa
+10011100 aaaaaaaa aaaaaaaa
 Adds %a to any SSD address
 
 
@@ -206,7 +214,11 @@ Compare %a and %b, store result in flags
 
 mul %c(register), %a(register), %b(register)
 00101001 ccccaaaa 0000bbbb
-MUL %a and %b, store result in %c
+MUL (unsigned) %a and %b, store result in %c
+
+imul %c(register), %a(register), %b(register)
+00101001 ccccaaaa 0000bbbb
+MUL (signed) %a and %b, store result in %c
 
 
 nand %c(register), %a(register), %b(immediate)
@@ -252,6 +264,10 @@ Compare %a and %b, store result in flags
 mul %c(register), %a(register), %b(immediate)
 10101001 ccccaaaa bbbbbbbb bbbbbbbb
 MUL %a and %b, store result in %c
+
+imul %c(register), %a(register), %b(immediate)
+10101001 ccccaaaa 0000bbbb
+MUL (signed) %a and %b, store result in %c
 
 
 	;Synonyms
@@ -443,3 +459,21 @@ Loads 16 bits of %address from SSD and stores it to %dest
 pstore_16 [%address(immediate)], %value(register)
 11100111 0000vvvv aaaaaaaa aaaaaaaa
 Stores 16 bits of %value to %address in SSD
+
+
+;Complex
+push %a(register)
+10100101 11101110 00000000 00000010 10011011 00000000 00000111 01100011 1110aaaa
+Pushes %a onto the stack. Synonym for:   sub sp, sp, 2   dquick 7   store_16 [sp], %a
+
+pop %a(register)
+10011011 00000000 00000111 01100010 aaaa1110 10100100 11101110 00000000 00000010
+Pops stack onto %a. Synonym for:   dquick 7   load_16 %a, [sp]   add sp, sp, 2
+
+call %a(label)
+00000010 11110000 10100100 11111111 00000000 00010010 10100101 11101110 00000000 00000010 10011011 00000000 00000111 01100011 11111110 11010000 aaaaaaaa aaaaaaaa
+Calls %a. Overwrites flags. Synonym for:   counter flags   add flags, flags, 18   push flags   jmp %a
+
+ret
+10011011 00000000 00000111 01100010 11101111 10100100 11101110 00000000 00000010 01010000 00001111
+Returns from last function call. Overwrites flags. Synonym for:   pop flags   jmp flags
