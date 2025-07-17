@@ -1,0 +1,445 @@
+[fields]
+
+register
+zr 0000
+r1 0001
+r2 0010
+r3 0011
+r4 0100
+r5 0101
+r6 0110
+r7 0111
+r8 1000
+r9 1001
+r10 1010
+r11 1011
+r12 1100
+r13 1101
+sp 1110
+flags 1111
+
+[instructions]
+
+;IO (X00XXXXX)
+	;In to registers (XXX0XXXX)
+nop
+00000000
+Does nothing
+
+in %a(register)
+00000001 aaaa0000
+Loads the input and stores in %a
+
+counter %a(register)
+00000010 aaaa0000
+Stores counter value in %a
+
+keyboard %a(register)
+00000011 aaaa0000
+Stores keyboard value in %a
+
+time_0 %a(register)
+00000100 aaaa0000
+Stores the first two bytes of UNIX time in %a
+
+time_1 %a(register)
+00000101 aaaa0000
+Stores the second two bytes of UNIX time in %a at the time time_0 was run
+
+time_2 %a(register)
+00000110 aaaa0000
+Stores the second two bytes of UNIX time in %a at the time time_0 was run
+
+time_3 %a(register)
+00000111 aaaa0000
+Stores the second two bytes of UNIX time in %a at the time time_0 was run
+
+rread %a(register)
+00001000 aaaa0000
+Stores current RAM page in %a
+
+dread %a(register)
+00001001 aaaa0000
+Stores current DATA page in %a
+
+sread %a(register)
+00001010 aaaa0000
+Stores current SSD page in %a
+
+where %a(register)
+00001011 aaaa0000
+Stores the location of the cursor in %a
+
+in [%a(immediate)]
+10000001 aaaaaaaa aaaaaaaa
+Loads the input and stores in RAM at %a
+
+counter [%a(immediate)]
+10000010 aaaaaaaa aaaaaaaa
+Stores counter value in RAM at %a
+
+keyboard [%a(immediate)]
+10000011 aaaaaaaa aaaaaaaa
+Stores keyboard value in RAM at %a
+
+time [%a(immediate)]
+10000100 aaaaaaaa aaaaaaaa
+Stores UNIX time in RAM at %a
+
+
+	;Out of registers (XXX1XXXX)
+out %a(register)
+00010000 0000aaaa
+Sends %a to output
+
+console %a(register)
+00010100 0000aaaa
+Sets console offset to %a
+
+print %a(register)
+00010101 0000aaaa
+Prints ascii value in %a to console
+
+goto %a(register)
+00010110 0000aaaa
+Moves cursor to %a in console
+
+cur %a(register)
+00010111 0000aaaa
+Moves cursor %a to the right in console
+
+rpage %a(register)
+00011000 0000aaaa
+Sets the RAM page to %a
+
+dpage %a(register)
+00011001 0000aaaa
+Sets the DATA page to %a
+
+spage %a(register)
+00011010 0000aaaa
+Sets the SSD page to %a
+
+offset %address(register)
+00011011 0000aaaa
+Adds %a to any SSD address
+
+
+out %a(immediate)
+10010000 aaaaaaaa aaaaaaaa
+Sends %a to output
+
+console %a(immediate)
+10010100 aaaaaaaa aaaaaaaa
+Sets console offset to %a
+
+print %a(immediate)
+00010101 aaaaaaaa aaaaaaaa
+Prints ascii value in %a to console
+
+goto %a(immediate)
+00010110 aaaaaaaa aaaaaaaa
+Moves cursor to %a in console
+
+cur %a(immediate)
+00010111 aaaaaaaa aaaaaaaa
+Moves cursor %a to the right in console
+
+rpage %a(immediate)
+10011000 aaaaaaaa aaaaaaaa
+Sets the RAM page to %a
+
+dpage %a(immediate)
+10011001 aaaaaaaa aaaaaaaa
+Sets the DATA page to %a
+
+spage %a(immediate)
+10011010 aaaaaaaa aaaaaaaa
+Sets the SSD page to %a
+
+offset %address(immediate)
+10011011 00000000 aaaaaaaa aaaaaaaa
+Adds %a to any SSD address
+
+
+
+;ALU (X01XXXXX)
+nand %c(register), %a(register), %b(register)
+00100000 ccccaaaa 0000bbbb
+NAND %a and %b, store result in %c
+
+or %c(register), %a(register), %b(register)
+00100001 ccccaaaa 0000bbbb
+OR %a and %b, store result in %c
+
+and %c(register), %a(register), %b(register)
+00100010 ccccaaaa 0000bbbb
+AND %a and %b, store result in %c
+
+nor %c(register), %a(register), %b(register)
+00100011 ccccaaaa 0000bbbb
+NOR %a and %b, store result in %c
+
+add %c(register), %a(register), %b(register)
+00100100 ccccaaaa 0000bbbb
+ADD %a and %b, store result in %c
+
+sub %c(register), %a(register), %b(register)
+00100101 ccccaaaa 0000bbbb
+SUB %a and %b, store result in %c
+
+xor %c(register), %a(register), %b(register)
+00100110 ccccaaaa 0000bbbb
+XOR %a and %b, store result in %c
+
+lsl %c(register), %a(register), %b(register)
+00100110 ccccaaaa 0000bbbb
+LSL %a and %b, store result in %c
+
+lsr %c(register), %a(register), %b(register)
+00100111 ccccaaaa 0000bbbb
+LSR %a and %b, store result in %c
+
+cmp %a(register), %b(register)
+00101000 1111aaaa 0000bbbb
+Compare %a and %b, store result in flags
+
+mul %c(register), %a(register), %b(register)
+00101001 ccccaaaa 0000bbbb
+MUL %a and %b, store result in %c
+
+
+nand %c(register), %a(register), %b(immediate)
+10100000 ccccaaaa bbbbbbbb bbbbbbbb
+NAND %a and %b, store result in %c
+
+or %c(register), %a(register), %b(immediate)
+10100001 ccccaaaa bbbbbbbb bbbbbbbb
+OR %a and %b, store result in %c
+
+and %c(register), %a(register), %b(immediate)
+10100010 ccccaaaa bbbbbbbb bbbbbbbb
+AND %a and %b, store result in %c
+
+nor %c(register), %a(register), %b(immediate)
+10100011 ccccaaaa bbbbbbbb bbbbbbbb
+NOR %a and %b, store result in %c
+
+add %c(register), %a(register), %b(immediate)
+10100100 ccccaaaa bbbbbbbb bbbbbbbb
+ADD %a and %b, store result in %c
+
+sub %c(register), %a(register), %b(immediate)
+10100101 ccccaaaa bbbbbbbb bbbbbbbb
+SUB %a and %b, store result in %c
+
+xor %c(register), %a(register), %b(immediate)
+10100110 ccccaaaa bbbbbbbb bbbbbbbb
+XOR %a and %b, store result in %c
+
+lsl %c(register), %a(register), %b(immediate)
+10100110 ccccaaaa bbbbbbbb bbbbbbbb
+LSL %a and %b, store result in %c
+
+lsr %c(register), %a(register), %b(immediate)
+10100111 ccccaaaa bbbbbbbb bbbbbbbb
+LSR %a and %b, store result in %c
+
+cmp %a(register), %b(immediate)
+10101000 1111aaaa bbbbbbbb bbbbbbbb
+Compare %a and %b, store result in flags
+
+mul %c(register), %a(register), %b(immediate)
+10101001 ccccaaaa bbbbbbbb bbbbbbbb
+MUL %a and %b, store result in %c
+
+
+	;Synonyms
+mov %b(register), %a(register)
+00100001 bbbb0000 0000aaaa
+Copy %a to %b
+
+neg %b(register), %a(register)
+00100101 bbbb0000 0000aaaa
+NEG %a and store the result in %b
+
+not %b(register), %a(register)
+00100011 bbbb0000 0000aaaa
+NOT %a and store the result in %b
+
+
+mov %b(register), %a(immediate)
+10100001 bbbb0000 aaaaaaaa aaaaaaaa
+Copy %a to %b
+
+neg %b(register), %a(immediate)
+10100101 bbbb0000 aaaaaaaa aaaaaaaa
+NEG %a and store the result in %b
+
+not %b(register), %a(register)
+10100011 bbbb0000 aaaaaaaa aaaaaaaa
+NOT %a and store the result in %b
+
+
+
+;jumps (X10XXXXX)
+jmp %a(register)
+01010000 0000aaaa
+Jump to %a
+
+je %a(register)
+01000001 0000aaaa
+Jump to %a if values were equal
+
+jne %a(register)
+01010001 0000aaaa
+Jump to %a if values were not equal
+
+jb %a(register)
+01000010 0000aaaa
+Jump to %a if the first value was below (unsigned) the second
+
+jae %a(register)
+01010010 0000aaaa
+Jump to %a if the first value was above (unsigned) or equal to the second
+
+jbe %a(register)
+01000011 0000aaaa
+Jump to %a if the first value was below (unsigned) or equal to the second
+
+ja %a(register)
+01010011 0000aaaa
+Jump to %a if the first value was above (unsigned) the second
+
+jl %a(register)
+01000100 0000aaaa
+Jump to %a if the first value was less (signed) than the second
+
+jge %a(register)
+01010100 0000aaaa
+Jump to %a if the first value was greater (signed) than or equal to the second
+
+jle %a(register)
+01000101 0000aaaa
+Jump to %a if the first value was less (signed) than or equal to the second
+
+jg %a(register)
+01010101 0000aaaa
+Jump to %a if the first value was greater (signed) than the second
+
+
+jmp %a(immediate | label)
+11010000 aaaaaaaa aaaaaaaa
+Jump to %a
+
+je %a(immediate | label)
+11000001 aaaaaaaa aaaaaaaa
+Jump to %a if values were equal
+
+jne %a(immediate | label)
+11010001 aaaaaaaa aaaaaaaa
+Jump to %a if values were not equal
+
+jb %a(immediate | label)
+11000010 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was below (unsigned) the second
+
+jae %a(immediate | label)
+11010010 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was above (unsigned) or equal to the second
+
+jbe %a(immediate | label)
+11000011 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was below (unsigned) or equal to the second
+
+ja %a(immediate | label)
+11010011 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was above (unsigned) the second
+
+jl %a(immediate | label)
+11000100 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was less (signed) than the second
+
+jge %a(immediate | label)
+11010100 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was greater (signed) than or equal to the second
+
+jle %a(immediate | label)
+11000101 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was less (signed) than or equal to the second
+
+jg %a(immediate | label)
+11010101 aaaaaaaa aaaaaaaa
+Jump to %a if the first value was greater (signed) than the second
+
+
+
+;Loading and Storing (X11XXXXX)
+	;RAM
+load_8 %dest(register), [%address(register)]
+01100000 ddddaaaa
+Loads 8 bits of %address from RAM and stores it to %dest
+
+store_8 [%address(register)], %value(register)
+01100001 aaaavvvv
+Stores 8 bits of %value to %address in RAM
+
+load_16 %dest(register), [%address(register)]
+01100010 ddddaaaa
+Loads 16 bits of %address from RAM and stores it to %dest
+
+store_16 [%address(register)], %value(register)
+01100011 aaaavvvv
+Stores 16 bits of %value to %address in RAM
+
+
+load_8 %dest(register), [%address(immediate)]
+11100000 dddd0000 aaaaaaaa aaaaaaaa
+Loads 8 bits of %address from RAM and stores it to %dest
+
+store_8 [%address(immediate)], %value(register)
+11100001 0000vvvv aaaaaaaa aaaaaaaa
+Stores 8 bits of %value to %address in RAM
+
+load_16 %dest(register), [%address(immediate)]
+11100010 dddd0000 aaaaaaaa aaaaaaaa
+Loads 16 bits of %address from RAM and stores it to %dest
+
+store_16 [%address(immediate)], %value(register)
+11100011 0000vvvv aaaaaaaa aaaaaaaa
+Stores 16 bits of %value to %address in RAM
+
+
+	;SSD
+pload_8 %dest(register), [%address(register)]
+01100000 ddddaaaa
+Loads 8 bits of %address from SSD and stores it to %dest
+
+pstore_8 [%address(register)], %value(register)
+01100001 aaaavvvv
+Stores 8 bits of %value to %address in SSD
+
+pload_16 %dest(register), [%address(register)]
+01100010 ddddaaaa
+Loads 16 bits of %address from SSD and stores it to %dest
+
+pstore_16 [%address(register)], %value(register)
+01100011 aaaavvvv
+Stores 16 bits of %value to %address in SSD
+
+
+pload_8 %dest(register), [%address(immediate)]
+11100100 dddd0000 aaaaaaaa aaaaaaaa
+Loads 8 bits of %address from SSD and stores it to %dest
+
+pstore_8 [%address(immediate)], %value(register)
+11100101 0000vvvv aaaaaaaa aaaaaaaa
+Stores 8 bits of %value to %address in SSD
+
+pload_16 %dest(register), [%address(immediate)]
+11100110 dddd0000 aaaaaaaa aaaaaaaa
+Loads 16 bits of %address from SSD and stores it to %dest
+
+pstore_16 [%address(immediate)], %value(register)
+11100111 0000vvvv aaaaaaaa aaaaaaaa
+Stores 16 bits of %value to %address in SSD
