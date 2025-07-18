@@ -34,6 +34,33 @@ def FindOpenRegister():
         if(not register.used):
             return register
 
+def ReduceBrackets(parts):
+    stack = []
+    current = []
+
+    tokens = []    
+    for part in parts:
+        split = re.findall(r'\(|\)|[^\s()]+', part)
+        print(f"Split : {split} Part : {part}")
+        tokens.extend(split)
+    print(f"Tokens : {tokens}")
+    
+    for token in tokens:
+        if(token == "("):
+            stack.append(current)
+            current = []
+            print(f"stack : {stack}, current : {current}")
+        elif(token == ")"):
+            print(stack, current)
+            completed = current
+            current = stack.pop()
+            current.append(completed)
+            print(f"stack : {stack}, current : {current}")
+        else:
+            current.append(token)
+    
+    return current
+
 def ReduceExpression(partsRevisedFirstPass, operationSet = operations):
     counter = 1
     partsRevised = []
@@ -135,9 +162,19 @@ for line in lines:
                     partsRevisedFirstPass.append(parts[counter])
                 counter += 2"""
             
-            partsRevisedFirstPass = ReduceExpression(parts, {"*", "/"})
-            while("*" in partsRevisedFirstPass) or ("/" in partsRevisedFirstPass):
-                partsRevisedFirstPass = ReduceExpression(partsRevisedFirstPass, {"*", "/"})
+            #Brackets pass
+            partsRevisedBrackets = parts
+            while(any("(" in sublist for sublist in partsRevisedBrackets)):
+                partsRevisedBrackets = ReduceBrackets(partsRevisedBrackets)
+            
+            print(f"Bracket fix : {partsRevisedBrackets}")
+            
+            if("*" in partsRevisedBrackets) or ("/" in partsRevisedBrackets):
+                partsRevisedFirstPass = ReduceExpression(partsRevisedBrackets, {"*", "/"})
+                while("*" in partsRevisedFirstPass) or ("/" in partsRevisedFirstPass):
+                    partsRevisedFirstPass = ReduceExpression(partsRevisedFirstPass, {"*", "/"})
+            else:
+                partsRevisedFirstPass = partsRevisedBrackets
             
             print(f"Pass 1 : {partsRevisedFirstPass}")
             """counter = 1
@@ -152,15 +189,20 @@ for line in lines:
                     partsRevised.append(partsRevisedFirstPass[counter])
                 counter += 2"""
             
-            partsRevised = ReduceExpression(partsRevisedFirstPass)
-            while(len(partsRevised) > 3):
-                partsRevised = ReduceExpression(partsRevised)
+            if(len(partsRevisedFirstPass) > 3):
+                partsRevised = ReduceExpression(partsRevisedFirstPass)
+                while(len(partsRevised) > 3):
+                    partsRevised = ReduceExpression(partsRevised)
+            else:
+                partsRevised = partsRevisedFirstPass
             
             print(f"partsRevised {partsRevised}")
 
             lineIndex = 0
             
-            output, _, usedRegisters = GenerateOperationAssembly([], partsRevised, set(), True, 3)
+            if len(partsRevised) == 1 and isinstance(partsRevised[0], list):
+                partsRevised = partsRevised[0]
+            output, _, usedRegisters = GenerateOperationAssembly([], partsRevised, set(), True,  registerToUse.registerCode)
             print(f"Assembly output for operations : {output}")
             print(f"Used registers : {usedRegisters}")
             outputLines += output
@@ -208,3 +250,5 @@ for line in lines:
 with open("OutputAssembly.asm", "w") as fileHandle:
     outputLines[-1] = outputLines[-1].strip("\n")
     fileHandle.writelines(outputLines)
+    
+print(activeRegisters)
