@@ -1,3 +1,5 @@
+268435456_005A22894616E712.bin stores the hard drive data and size, it is empty and you do not have to download if you want a different sized ssd.
+
 Compiler features
 - Arithmetic operations
 - BIDMAS reordering
