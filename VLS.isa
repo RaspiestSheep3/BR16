@@ -492,19 +492,19 @@ Stores 16 bits of %value to %address in RAM
 
 	;SSD
 pload_8 %dest(register), [%address(register)]
-01100000 ddddaaaa
+01100100 ddddaaaa
 Loads 8 bits of %address from SSD and stores it to %dest
 
 pstore_8 [%address(register)], %value(register)
-01100001 aaaavvvv
+01100101 aaaavvvv
 Stores 8 bits of %value to %address in SSD
 
 pload_16 %dest(register), [%address(register)]
-01100010 ddddaaaa
+01100110 ddddaaaa
 Loads 16 bits of %address from SSD and stores it to %dest
 
 pstore_16 [%address(register)], %value(register)
-01100011 aaaavvvv
+01100111 aaaavvvv
 Stores 16 bits of %value to %address in SSD
 
 
