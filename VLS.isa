@@ -196,29 +196,61 @@ sub %c(register), %a(register), %b(register)
 00100101 ccccaaaa 0000bbbb
 SUB %a and %b, store result in %c
 
-xor %c(register), %a(register), %b(register)
+lsr %c(register), %a(register), %b(register)
 00100110 ccccaaaa 0000bbbb
-XOR %a and %b, store result in %c
+LSR %a (unsigned) by %b, store result in %c
 
 lsl %c(register), %a(register), %b(register)
-00100110 ccccaaaa 0000bbbb
-LSL %a and %b, store result in %c
-
-lsr %c(register), %a(register), %b(register)
 00100111 ccccaaaa 0000bbbb
-LSR %a and %b, store result in %c
+LSL %a (unsigned) by %b, store result in %c
 
 cmp %a(register), %b(register)
 00101000 1111aaaa 0000bbbb
 Compare %a and %b, store result in flags
 
-mul %c(register), %a(register), %b(register)
+xor %c(register), %a(register), %b(register)
 00101001 ccccaaaa 0000bbbb
+XOR %a and %b, store result in %c
+
+mul %c(register), %a(register), %b(register)
+00101010 ccccaaaa 0000bbbb
 MUL (unsigned) %a and %b, store result in %c
 
 imul %c(register), %a(register), %b(register)
-00101001 ccccaaaa 0000bbbb
+00101011 ccccaaaa 0000bbbb
 MUL (signed) %a and %b, store result in %c
+
+div %c(register), %a(register), %b(register)
+00101100 ccccaaaa 0000bbbb
+DIV (unsigned) %a and %b, store result in %c
+
+mod %c(register), %a(register), %b(register)
+00101101 ccccaaaa 0000bbbb
+MOD (unsigned) %a and %b, store result in %c
+
+idiv %c(register), %a(register), %b(register)
+00101110 ccccaaaa 0000bbbb
+DIV (signed) %a and %b, store result in %c
+
+imod %c(register), %a(register), %b(register)
+00101111 ccccaaaa 0000bbbb
+MOD (signed) %a and %b, store result in %c
+
+asr %c(register), %a(register), %b(register)
+00110000 ccccaaaa 0000bbbb
+LSR %a (signed) by %b, store result in %c
+
+asl %c(register), %a(register), %b(register)
+00110001 ccccaaaa 0000bbbb
+LSL %a (signed) by %b, store result in %c
+
+ror %c(register), %a(register), %b(register)
+00110010 ccccaaaa 0000bbbb
+ROR %a by %b, store result in %c
+
+rol %c(register), %a(register), %b(register)
+00110011 ccccaaaa 0000bbbb
+ROL %a by %b, store result in %c
 
 
 nand %c(register), %a(register), %b(immediate)
@@ -245,29 +277,61 @@ sub %c(register), %a(register), %b(immediate)
 10100101 ccccaaaa bbbbbbbb bbbbbbbb
 SUB %a and %b, store result in %c
 
-xor %c(register), %a(register), %b(immediate)
+lsr %c(register), %a(register), %b(immediate)
 10100110 ccccaaaa bbbbbbbb bbbbbbbb
-XOR %a and %b, store result in %c
+LSR %a and %b, store result in %c
 
 lsl %c(register), %a(register), %b(immediate)
-10100110 ccccaaaa bbbbbbbb bbbbbbbb
-LSL %a and %b, store result in %c
-
-lsr %c(register), %a(register), %b(immediate)
 10100111 ccccaaaa bbbbbbbb bbbbbbbb
-LSR %a and %b, store result in %c
+LSL %a and %b, store result in %c
 
 cmp %a(register), %b(immediate)
 10101000 1111aaaa bbbbbbbb bbbbbbbb
 Compare %a and %b, store result in flags
 
-mul %c(register), %a(register), %b(immediate)
+xor %c(register), %a(register), %b(immediate)
 10101001 ccccaaaa bbbbbbbb bbbbbbbb
+XOR %a and %b, store result in %c
+
+mul %c(register), %a(register), %b(immediate)
+10101010 ccccaaaa bbbbbbbb bbbbbbbb
 MUL %a and %b, store result in %c
 
 imul %c(register), %a(register), %b(immediate)
-10101001 ccccaaaa 0000bbbb
+10101011 ccccaaaa bbbbbbbb bbbbbbbb
 MUL (signed) %a and %b, store result in %c
+
+div %c(register), %a(register), %b(immediate)
+10101100 ccccaaaa bbbbbbbb bbbbbbbb
+DIV (unsigned) %a and %b, store result in %c
+
+mod %c(register), %a(register), %b(immediate)
+10101101 ccccaaaa bbbbbbbb bbbbbbbb
+MOD (unsigned) %a and %b, store result in %c
+
+idiv %c(register), %a(register), %b(immediate)
+10101110 ccccaaaa bbbbbbbb bbbbbbbb
+DIV (signed) %a and %b, store result in %c
+
+imod %c(register), %a(register), %b(immediate)
+10101111 ccccaaaa bbbbbbbb bbbbbbbb
+MOD (signed) %a and %b, store result in %c
+
+asr %c(register), %a(register), %b(immediate)
+10110000 ccccaaaa bbbbbbbb bbbbbbbb
+LSR %a (signed) by %b, store result in %c
+
+asl %c(register), %a(register), %b(immediate)
+10110001 ccccaaaa bbbbbbbb bbbbbbbb
+LSL %a (signed) by %b, store result in %c
+
+ror %c(register), %a(register), %b(immediate)
+10110010 ccccaaaa bbbbbbbb bbbbbbbb
+ROR %a by %b, store result in %c
+
+rol %c(register), %a(register), %b(immediate)
+10110011 ccccaaaa bbbbbbbb bbbbbbbb
+ROL %a by %b, store result in %c
 
 
 	;Synonyms
